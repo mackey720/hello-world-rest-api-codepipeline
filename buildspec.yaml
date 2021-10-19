@@ -9,22 +9,22 @@ phases:
       - aws --version
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
       - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
-      - IMAGE_URI=${REPOSITORY_URI}:${TAG}
+      - REPOSITORY_URI=127083894006.dkr.ecr.us-east-1.amazonaws.com/hello-world-rest-api:${TAG}
   build:
     commands:
       - echo Build started on `date`
-      - echo $IMAGE_URI
+      - echo $REPOSITORY_URI
       - mvn clean package -Ddockerfile.skip
-      - docker build --tag $IMAGE_URI .
+      - docker build --tag $REPOSITORY_URI .
   post_build:
     commands:
       - printenv
       - echo Build completed on `date`
       - echo $(docker images)
       - echo Pushing docker image
-      - docker push $IMAGE_URI
+      - docker push $REPOSITORY_URI
       - echo push completed
-      - printf '[{"name":"%s","imageUri":"%s"}]' $CONTAINER_NAME $IMAGE_URI > imagedefinitions.json
+      - printf '[{"name":"%s","repositoryUri":"%s"}]' $CONTAINER_NAME $REPOSITORY_URI > imagedefinitions.json
 artifacts:
   files:
     - imagedefinitions.json
