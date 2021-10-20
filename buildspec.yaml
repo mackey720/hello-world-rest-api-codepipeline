@@ -24,7 +24,7 @@ phases:
       - echo Pushing docker image
       - docker push $REPOSITORY_URI
       - echo push completed
-      - printf '[{"name":"%s","imageUri":"%s"}]' $REPOSITORY_URI > imagedefinitions.json
+      - printf '[{"name":"aws-hello-world-rest-api","imageUri":"%s"}]' $REPOSITORY_URI > imagedefinitions.json
 artifacts:
   files:
     - imagedefinitions.json
